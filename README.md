@@ -4,9 +4,9 @@
 Puzzle Mania is an online soft skill test webiste. I mainly checks the perseverance of the person. User have to guess a word by solving a series of questions which the uer have to answer to complete the game. 
 
 ## Features Implemented
-  -Anyone with an email address can create an Id and password to participate in the game
-  -Admin panel
-  -User Analytics(eg : time taken by each user for every step)
+  - Anyone with an email address can create an Id and password to participate in the game
+  - Admin panel
+  - User Analytics(eg : time taken by each user for every step)
 
 ## Technologies Used
  React
