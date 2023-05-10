@@ -1,2 +1,2 @@
-const baseURL = "http://localhost:4000";
+const baseURL = "https://puzzle-mania-backend-production.up.railway.app";
 export default baseURL;

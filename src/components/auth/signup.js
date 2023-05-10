@@ -3,17 +3,20 @@ import "./signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import baseURL from "../api/api";
+import { Spinner } from "react-bootstrap";
 
 const RegisterForm = (props) => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   let navigate = useNavigate();
 
   const submitHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
     if (password !== confirmPassword) {
       alert("Passwords do not match!!!");
       return;
@@ -26,7 +29,9 @@ const RegisterForm = (props) => {
     axios
       .post(baseURL + "/user/signup", { user })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
+
+        setLoading(false);
         alert("Signup success");
         navigate("/login");
       })
@@ -82,17 +87,25 @@ const RegisterForm = (props) => {
             />
           </div>
           <div id="button" className="row">
-            <button type="submit">Signup</button>
+            <button type="submit" disabled={loading}>
+              {loading ? <Spinner /> : "Signup"}
+            </button>
           </div>
         </form>
-        <div className="row">
-          <span>
-            Already have an account?{" "}
-            <Link to="/login" style={{ textDecoration: "none" }}>
-              Login
-            </Link>{" "}
-            now!!!
-          </span>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBlock: "15px",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          Already have an account?{" "}
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            Login
+          </Link>{" "}
+          now!!!
         </div>
       </div>
     </div>

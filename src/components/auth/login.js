@@ -3,15 +3,18 @@ import "./login.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import baseURL from "../api/api";
+import { Spinner } from "react-bootstrap";
 
 const LoginForm = (props) => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
     axios
       .post(baseURL + "/user/login", { email, password })
       .then((res) => {
@@ -25,7 +28,7 @@ const LoginForm = (props) => {
             },
           })
           .then((res) => {
-            console.log(res);
+            // console.log(res);
             localStorage.setItem("username", res.data.username);
             localStorage.setItem("email", res.data.email);
             localStorage.setItem("id", res.data._id);
@@ -34,6 +37,7 @@ const LoginForm = (props) => {
           .catch((e) => {
             alert(e);
           });
+        setLoading(false);
         setTimeout(() => {
           if (res.data.role === 1) {
             navigate("/user");
@@ -75,17 +79,26 @@ const LoginForm = (props) => {
             />
           </div>
           <div id="button" className="row">
-            <button type="submit">Log in</button>
+            <button type="submit" disabled={loading}>
+              {loading ? <Spinner /> : "Login"}
+            </button>
           </div>
         </form>
-        <div className="row">
-          <span>
-            Not having an account?{" "}
-            <Link to="/signup" style={{ textDecoration: "none" }}>
-              Signup
-            </Link>{" "}
-            now!!!
-          </span>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginBlock: "15px",
+            whiteSpace: "pre-wrap",
+          }}
+        >
+          Not having an account?
+          <Link to="/signup" style={{ textDecoration: "none" }}>
+            {" "}
+            Signup{" "}
+          </Link>{" "}
+          now!!!
         </div>
       </div>
     </div>
