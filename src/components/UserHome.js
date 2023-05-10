@@ -5,6 +5,7 @@ import ProblemList from "./ProblemsList";
 import ReactModal from "react-modal";
 import baseURL from "./api/api";
 import axios from "axios";
+import { Spinner } from "react-bootstrap";
 
 const word = ["P", "E", "R", "S", "E", "V", "E", "R", "E"];
 
@@ -20,6 +21,7 @@ function UserHome() {
   const [wa, setWa] = useState(0);
   const [startTime, setStartTime] = useState(Date.now());
   const [toContinue, setToContinue] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const username = localStorage.getItem("username");
@@ -67,6 +69,7 @@ function UserHome() {
   };
 
   const saveData = (currentStep, wrong) => {
+    setLoading(true);
     const now = Date.now();
     const timeTaken = (now - startTime) / 1000;
     const wrongAttempts = wa;
@@ -81,7 +84,18 @@ function UserHome() {
           stepDetail,
         })
         .then((res) => {
-          // console.log(res.status)
+          // console.log(res.status);
+          setLoading(false);
+          if (showModal) {
+            setShowModal(false);
+            if (step === 8) {
+              setIsComplete(true);
+            } else setStep(step + 1);
+            setWa(0);
+            setVal("");
+          } else if (toContinue) {
+            setToContinue(false);
+          }
         })
         .catch((e) => console.log(e));
     } catch (error) {
@@ -93,16 +107,6 @@ function UserHome() {
     if (e.key === "Enter") {
       setShowModal(true);
     }
-  };
-
-  const changeProblem = () => {
-    if (step === 8) {
-      setIsComplete(true);
-    } else setStep(step + 1);
-    setWa(0);
-    setShowModal(false);
-    setVal("");
-    saveData(step + 1, 0);
   };
 
   const TOContinueModal = () => {
@@ -130,6 +134,7 @@ function UserHome() {
             borderRadius: "15px",
           },
         }}
+        ariaHideApp={false}
       >
         <div>
           <div
@@ -155,14 +160,14 @@ function UserHome() {
               <button
                 className="modal-button"
                 onClick={() => {
+                  saveData(0, 0);
                   setStep(0);
                   setWa(0);
                   setStartTime(Date.now());
-                  saveData(0, 0);
-                  setToContinue(false);
                 }}
+                disabled={loading}
               >
-                Restart
+                {loading ? <Spinner size="sm" /> : "Restart"}
               </button>
             </div>
           </div>
@@ -187,7 +192,6 @@ function UserHome() {
         style={{ position: "fixed", right: 0, top: 75 }}
       >
         Logout
-        <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />
       </button>
       <h3>Hi {userName}! Hope you are doing well!</h3>
       <h4>Let's check your soft skills</h4>
@@ -220,6 +224,7 @@ function UserHome() {
             borderRadius: "15px",
           },
         }}
+        ariaHideApp={false}
       >
         <div>
           {val.toLowerCase() === word[step].toLowerCase() ? (
@@ -235,8 +240,12 @@ function UserHome() {
               <div style={{ alignSelf: "center" }}>
                 Yayy!!! You got the correct answer.
               </div>
-              <button className="modal-button" onClick={() => changeProblem()}>
-                Go to next problem
+              <button
+                disabled={loading}
+                className="modal-button"
+                onClick={() => saveData(step + 1, 0)}
+              >
+                {loading ? <Spinner size="sm" /> : "Go to next problem"}
               </button>
             </div>
           ) : (
@@ -286,6 +295,7 @@ function UserHome() {
             borderRadius: "15px",
           },
         }}
+        ariaHideApp={false}
       >
         <div>
           <div
@@ -349,7 +359,7 @@ function UserHome() {
                       style={{
                         background: "transparent",
                         border: "none",
-                        width: "8px",
+                        width: "13px",
                         outline: "none",
                       }}
                     />
