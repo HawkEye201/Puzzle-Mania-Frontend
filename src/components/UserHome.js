@@ -33,11 +33,11 @@ function UserHome() {
       return;
     }
     try {
-      console.log(ID);
+      // console.log(ID);
       axios
         .get(baseURL + "/user/details/" + ID)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setStep(res.data.currentStep);
           setWa(res.data.wa);
           if (res.data.startTime !== 0) {
@@ -80,7 +80,9 @@ function UserHome() {
           now,
           stepDetail,
         })
-        .then((res) => console.log(res.status))
+        .then((res) => {
+          // console.log(res.status)
+        })
         .catch((e) => console.log(e));
     } catch (error) {
       console.log(error);
@@ -185,6 +187,7 @@ function UserHome() {
         style={{ position: "fixed", right: 0, top: 75 }}
       >
         Logout
+        <i className="fa fa-refresh fa-spin" style={{ marginRight: "5px" }} />
       </button>
       <h3>Hi {userName}! Hope you are doing well!</h3>
       <h4>Let's check your soft skills</h4>

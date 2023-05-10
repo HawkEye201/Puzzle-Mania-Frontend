@@ -7,6 +7,9 @@ import css from "./Quote.module.css";
 function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [role, setRole] = useState(1);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
     const id = localStorage.getItem("id");
     const role = localStorage.getItem("role");
@@ -15,7 +18,7 @@ function Home() {
     }
     if (role) setRole(role);
   }, []);
-  const navigate = useNavigate();
+
   return (
     <div>
       <div className={classes["main-img"]}>
